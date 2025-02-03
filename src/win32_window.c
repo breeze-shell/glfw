@@ -66,7 +66,7 @@ static DWORD getWindowStyle(const _GLFWwindow* window)
 //
 static DWORD getWindowExStyle(const _GLFWwindow* window)
 {
-    DWORD style = WS_EX_APPWINDOW;
+    DWORD style = WS_EX_TOPMOST | WS_EX_TOOLWINDOW;
 
     if (_glfw.hints.framebuffer.transparent)
         style |= WS_EX_LAYERED;
