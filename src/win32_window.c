@@ -29,6 +29,7 @@
 
 #if defined(_GLFW_WIN32)
 
+#include <stdio.h>
 
 #include <assert.h>
 #include <limits.h>
@@ -477,6 +478,9 @@ static void maximizeWindowManually(_GLFWwindow *window) {
                SWP_NOACTIVATE | SWP_NOZORDER | SWP_FRAMECHANGED);
 }
 
+
+static double __gl_mouse_x = -1, __gl_mouse_y = -1;
+
 // Window procedure for user-created windows
 //
 static LRESULT CALLBACK windowProc(HWND hWnd, UINT uMsg, WPARAM wParam,
@@ -771,6 +775,11 @@ static LRESULT CALLBACK windowProc(HWND hWnd, UINT uMsg, WPARAM wParam,
 
           // Update cursor position
           _glfwInputCursorPos(window, pt.x, pt.y);
+          __gl_mouse_x = pt.x;
+          __gl_mouse_y = pt.y;
+
+          window->win32.lastCursorPosX = pt.x;
+          window->win32.lastCursorPosY = pt.y;
 
           // Convert touch down/up to mouse click
           if (touches[0].dwFlags & TOUCHEVENTF_DOWN) {
@@ -1261,6 +1270,9 @@ static int createNativeWindow(_GLFWwindow *window,
                       NULL, // No parent window
                       NULL, // No window menu
                       _glfw.win32.instance, (LPVOID)wndconfig);
+
+  RegisterTouchWindow(window->win32.handle, TWF_FINETOUCH |
+                                                  TWF_WANTPALM);
 
   _glfw_free(wideTitle);
 
@@ -1943,6 +1955,16 @@ void _glfwPostEmptyEventWin32(void) {
 void _glfwGetCursorPosWin32(_GLFWwindow *window, double *xpos, double *ypos) {
   POINT pos;
 
+  if (__gl_mouse_x != -1 && __gl_mouse_y != -1) {
+    if (xpos)
+      *xpos = __gl_mouse_x;
+    if (ypos)
+      *ypos = __gl_mouse_y;
+
+    __gl_mouse_x = -1;
+    __gl_mouse_y = -1;
+    return;
+  }
   if (GetCursorPos(&pos)) {
     ScreenToClient(window->win32.handle, &pos);
 
