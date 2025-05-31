@@ -501,6 +501,9 @@ static LRESULT CALLBACK windowProc(HWND hWnd, UINT uMsg, WPARAM wParam,
   }
 
   switch (uMsg) {
+  case WM_GETOBJECT: {
+    return 0;
+  }
   case WM_MOUSEACTIVATE: {
     // HACK: Postpone cursor disabling when the window was activated by
     //       clicking a caption button
