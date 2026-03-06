@@ -64,7 +64,7 @@ static DWORD getWindowStyle(const _GLFWwindow *window) {
 // Returns the extended window style for the specified window
 //
 static DWORD getWindowExStyle(const _GLFWwindow *window) {
-  DWORD style = WS_EX_TOPMOST | WS_EX_TOOLWINDOW;
+  DWORD style = window->win32.customExStyle ? window->win32.customExStyle : (WS_EX_TOPMOST | WS_EX_TOOLWINDOW);
 
   if (_glfw.hints.framebuffer.transparent)
     style |= WS_EX_LAYERED;
@@ -1859,6 +1859,11 @@ void _glfwSetRawMouseMotionWin32(_GLFWwindow *window, GLFWbool enabled) {
     enableRawMouseMotion(window);
   else
     disableRawMouseMotion(window);
+}
+
+void _glfwSetWindowExStyleWin32(_GLFWwindow *window, DWORD exStyle) {
+  window->win32.customExStyle = exStyle;
+  updateWindowStyles(window);
 }
 
 GLFWbool _glfwRawMouseMotionSupportedWin32(void) { return GLFW_TRUE; }

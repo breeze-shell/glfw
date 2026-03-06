@@ -1036,6 +1036,18 @@ GLFWAPI void glfwSetWindowMonitor(GLFWwindow* wh,
                                     refreshRate);
 }
 
+GLFWAPI void glfwSetExStyle(GLFWwindow* handle, unsigned long exStyle)
+{
+    _GLFW_REQUIRE_INIT();
+
+    _GLFWwindow* window = (_GLFWwindow*) handle;
+    assert(window != NULL);
+
+#if defined(_GLFW_WIN32)
+    _glfwSetWindowExStyleWin32(window, (DWORD)exStyle);
+#endif
+}
+
 GLFWAPI void glfwSetWindowUserPointer(GLFWwindow* handle, void* pointer)
 {
     _GLFW_REQUIRE_INIT();

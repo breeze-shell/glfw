@@ -3792,6 +3792,32 @@ GLFWAPI float glfwGetWindowOpacity(GLFWwindow* window);
  */
 GLFWAPI void glfwSetWindowOpacity(GLFWwindow* window, float opacity);
 
+/*! @brief Sets the extended window style for the specified window (Win32 only).
+ *
+ *  This function sets the extended window style (WS_EX_*) for the specified
+ *  window on Windows. On other platforms, this function does nothing.
+ *
+ *  Common extended styles include:
+ *  - WS_EX_TOPMOST (0x00000008L): Places the window above all non-topmost windows
+ *  - WS_EX_TOOLWINDOW (0x00000080L): Creates a tool window
+ *  - WS_EX_LAYERED (0x00080000L): Creates a layered window
+ *  - WS_EX_TRANSPARENT (0x00000020L): Makes the window transparent to mouse input
+ *
+ *  @param[in] window The window whose extended style to set.
+ *  @param[in] exStyle The extended window style flags.
+ *
+ *  @errors Possible errors include @ref GLFW_NOT_INITIALIZED.
+ *
+ *  @remark @win32 This function directly sets the WS_EX_* flags for the window.
+ *
+ *  @thread_safety This function must only be called from the main thread.
+ *
+ *  @since Added in version 3.5.
+ *
+ *  @ingroup window
+ */
+GLFWAPI void glfwSetExStyle(GLFWwindow* window, unsigned long exStyle);
+
 /*! @brief Iconifies the specified window.
  *
  *  This function iconifies (minimizes) the specified window if it was
