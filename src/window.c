@@ -379,6 +379,9 @@ GLFWAPI void glfwWindowHint(int hint, int value)
         case GLFW_WIN32_SHOWDEFAULT:
             _glfw.hints.window.win32.showDefault = value ? GLFW_TRUE : GLFW_FALSE;
             return;
+        case GLFW_WIN32_EXSTYLE:
+            _glfw.hints.window.win32.exStyle = value;
+            return;
         case GLFW_COCOA_GRAPHICS_SWITCHING:
             _glfw.hints.context.nsgl.offline = value ? GLFW_TRUE : GLFW_FALSE;
             return;
@@ -1034,18 +1037,6 @@ GLFWAPI void glfwSetWindowMonitor(GLFWwindow* wh,
     _glfw.platform.setWindowMonitor(window, monitor,
                                     xpos, ypos, width, height,
                                     refreshRate);
-}
-
-GLFWAPI void glfwSetExStyle(GLFWwindow* handle, unsigned long exStyle)
-{
-    _GLFW_REQUIRE_INIT();
-
-    _GLFWwindow* window = (_GLFWwindow*) handle;
-    assert(window != NULL);
-
-#if defined(_GLFW_WIN32)
-    _glfwSetWindowExStyleWin32(window, (DWORD)exStyle);
-#endif
 }
 
 GLFWAPI void glfwSetWindowUserPointer(GLFWwindow* handle, void* pointer)

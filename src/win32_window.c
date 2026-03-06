@@ -64,7 +64,7 @@ static DWORD getWindowStyle(const _GLFWwindow *window) {
 // Returns the extended window style for the specified window
 //
 static DWORD getWindowExStyle(const _GLFWwindow *window) {
-  DWORD style = window->win32.customExStyle ? window->win32.customExStyle : (WS_EX_TOPMOST | WS_EX_TOOLWINDOW);
+  DWORD style = window->win32.customExStyle;
 
   if (_glfw.hints.framebuffer.transparent)
     style |= WS_EX_LAYERED;
@@ -1167,6 +1167,12 @@ static int createNativeWindow(_GLFWwindow *window,
                               const _GLFWfbconfig *fbconfig) {
   int frameX, frameY, frameWidth, frameHeight;
   WCHAR *wideTitle;
+
+  // Initialize custom extended style from window hint
+  window->win32.customExStyle = wndconfig->win32.exStyle ?
+                                wndconfig->win32.exStyle :
+                                (WS_EX_TOPMOST | WS_EX_TOOLWINDOW);
+
   DWORD style = getWindowStyle(window);
   DWORD exStyle = getWindowExStyle(window);
 
@@ -1859,11 +1865,6 @@ void _glfwSetRawMouseMotionWin32(_GLFWwindow *window, GLFWbool enabled) {
     enableRawMouseMotion(window);
   else
     disableRawMouseMotion(window);
-}
-
-void _glfwSetWindowExStyleWin32(_GLFWwindow *window, DWORD exStyle) {
-  window->win32.customExStyle = exStyle;
-  updateWindowStyles(window);
 }
 
 GLFWbool _glfwRawMouseMotionSupportedWin32(void) { return GLFW_TRUE; }
